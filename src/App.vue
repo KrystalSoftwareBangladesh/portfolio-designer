@@ -10,7 +10,7 @@ import FooterSection from './components/FooterSection.vue'
 
 <template>
   <NavBar />
-  <main>
+  <main class="relative">
     <HeroSection />
     <AboutSection />
     <WorkSection />
@@ -19,9 +19,3 @@ import FooterSection from './components/FooterSection.vue'
   </main>
   <FooterSection />
 </template>
-
-<style scoped>
-main {
-  position: relative;
-}
-</style>

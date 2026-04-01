@@ -27,10 +27,9 @@ onMounted(() => {
     opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
     scrollTrigger: { trigger: sectionRef.value, start: 'top 75%' }
   })
-
-  skills.forEach((_, i) => {
+  skills.forEach((skill, i) => {
     gsap.fromTo(`.skill-bar-fill-${i}`, { width: 0 }, {
-      width: `${skills[i].level}%`,
+      width: `${skill.level}%`,
       duration: 1.2,
       ease: 'power3.out',
       scrollTrigger: { trigger: `.skill-bar-fill-${i}`, start: 'top 85%' }
@@ -40,67 +39,70 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="about" ref="sectionRef" class="about-section">
-    <div class="container">
-      <div class="about-grid">
+  <section id="about" ref="sectionRef" class="py-[120px] bg-bg-2 border-t border-border">
+    <div class="max-w-[1200px] mx-auto px-8">
+      <div class="grid lg:grid-cols-2 gap-20 items-start">
+
+        <!-- Left: text -->
         <div class="about-text-col">
           <p class="section-label">About Me</p>
-          <h2 class="about-title">Design that lives, breathes, and moves.</h2>
-          <p class="about-desc">
+          <h2 class="font-syne font-extrabold mb-6" style="font-size: clamp(32px,4vw,52px)">
+            Design that lives, breathes, and moves.
+          </h2>
+          <p class="text-text text-base leading-[1.8] mb-5">
             With over 8 years in the creative industry, I blend graphic design fundamentals
             with the kinetic energy of motion to create experiences that leave a lasting impression.
             From brand films to social content, UI animations to title sequences — I craft motion
             that communicates, captivates, and converts.
           </p>
-          <p class="about-desc">
+          <p class="text-text text-base leading-[1.8] mb-10">
             My approach is rooted in conceptual thinking and executed with technical precision.
             Every frame, every curve, every transition is intentional.
           </p>
 
-          <div class="tools-section">
-            <p class="tools-label">Tools & Software</p>
-            <div class="tools-list">
-              <span v-for="tool in tools" :key="tool" class="tool-tag">{{ tool }}</span>
-            </div>
+          <p class="text-[11px] font-semibold tracking-wide15 uppercase text-text-light mb-4">Tools & Software</p>
+          <div class="flex flex-wrap gap-2.5">
+            <span
+              v-for="tool in tools" :key="tool"
+              class="text-xs font-semibold px-3.5 py-1.5 rounded-full bg-bg-card border border-border text-text tracking-[0.03em] hover:border-accent hover:text-accent transition-all cursor-default"
+            >{{ tool }}</span>
           </div>
         </div>
 
-        <div class="about-skill-col">
-          <div class="skills-wrapper">
-            <h3 class="skills-title">Core Skills</h3>
-            <div class="skills-list">
-              <div v-for="(skill, i) in skills" :key="skill.name" class="skill-item">
-                <div class="skill-header">
-                  <span class="skill-name">{{ skill.name }}</span>
-                  <span class="skill-level">{{ skill.level }}%</span>
+        <!-- Right: skills + awards -->
+        <div class="about-skill-col flex flex-col gap-5">
+
+          <!-- Skill bars -->
+          <div class="bg-bg-card border border-border rounded-2xl p-8">
+            <h3 class="font-syne text-[18px] font-bold text-heading mb-7">Core Skills</h3>
+            <div class="flex flex-col gap-5">
+              <div v-for="(skill, i) in skills" :key="skill.name">
+                <div class="flex justify-between mb-2">
+                  <span class="text-sm font-medium text-heading">{{ skill.name }}</span>
+                  <span class="text-[13px] text-accent font-semibold font-syne">{{ skill.level }}%</span>
                 </div>
-                <div class="skill-bar">
-                  <div :class="`skill-bar-fill skill-bar-fill-${i}`"></div>
+                <div class="h-1 bg-border rounded-full overflow-hidden">
+                  <div
+                    :class="`skill-bar-fill-${i}`"
+                    class="h-full rounded-full"
+                    style="background: linear-gradient(to right, #c8f542, #a8d020); width: 0"
+                  ></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="awards-card">
-            <div class="award-item">
-              <span class="award-icon">✦</span>
+          <!-- Awards -->
+          <div class="bg-bg-card border border-border rounded-2xl p-7 flex flex-col gap-5">
+            <div v-for="award in [
+              { title: 'Awwwards Honorable Mention', year: '2023' },
+              { title: 'CSS Design Awards', year: '2022' },
+              { title: 'ADC Young Guns', year: '2021' },
+            ]" :key="award.title" class="flex items-center gap-4">
+              <span class="text-accent text-base flex-shrink-0">✦</span>
               <div>
-                <p class="award-title">Awwwards Honorable Mention</p>
-                <p class="award-year">2023</p>
-              </div>
-            </div>
-            <div class="award-item">
-              <span class="award-icon">✦</span>
-              <div>
-                <p class="award-title">CSS Design Awards</p>
-                <p class="award-year">2022</p>
-              </div>
-            </div>
-            <div class="award-item">
-              <span class="award-icon">✦</span>
-              <div>
-                <p class="award-title">ADC Young Guns</p>
-                <p class="award-year">2021</p>
+                <p class="text-sm font-semibold text-heading">{{ award.title }}</p>
+                <p class="text-xs text-text-light mt-0.5">{{ award.year }}</p>
               </div>
             </div>
           </div>
@@ -109,169 +111,3 @@ onMounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-.about-section {
-  padding: 120px 0;
-  background: var(--bg-2);
-  border-top: 1px solid var(--border);
-}
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: start;
-}
-
-.about-title {
-  font-size: clamp(32px, 4vw, 52px);
-  font-weight: 800;
-  margin-bottom: 24px;
-  line-height: 1.1;
-}
-
-.about-desc {
-  color: var(--text);
-  font-size: 16px;
-  line-height: 1.8;
-  margin-bottom: 20px;
-}
-
-.tools-section {
-  margin-top: 40px;
-}
-
-.tools-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-light);
-  margin-bottom: 16px;
-}
-
-.tools-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.tool-tag {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 100px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  letter-spacing: 0.03em;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.tool-tag:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.skills-wrapper {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 20px;
-}
-
-.skills-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 28px;
-  color: var(--heading);
-}
-
-.skills-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.skill-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.skill-name {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--heading);
-}
-
-.skill-level {
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: 600;
-  font-family: 'Syne', sans-serif;
-}
-
-.skill-bar {
-  height: 4px;
-  background: var(--border);
-  border-radius: 100px;
-  overflow: hidden;
-}
-
-.skill-bar-fill {
-  height: 100%;
-  background: linear-gradient(to right, var(--accent), var(--accent-dark));
-  border-radius: 100px;
-  width: 0;
-}
-
-.awards-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.award-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.award-icon {
-  color: var(--accent);
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.award-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--heading);
-}
-
-.award-year {
-  font-size: 12px;
-  color: var(--text-light);
-  margin-top: 2px;
-}
-
-@media (max-width: 1024px) {
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-}
-
-@media (max-width: 768px) {
-  .about-section {
-    padding: 80px 0;
-  }
-}
-</style>

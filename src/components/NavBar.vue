@@ -19,163 +19,67 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 </script>
 
 <template>
-  <nav :class="['navbar', { scrolled }]">
-    <div class="container nav-inner">
-      <a class="logo" href="#" @click.prevent="scrollToSection('hero')">
-        AM<span class="dot">.</span>
+  <nav
+    :class="[
+      'fixed top-0 left-0 right-0 z-50 transition-all duration-[400ms]',
+      scrolled
+        ? 'bg-bg/[0.92] backdrop-blur-lg py-4 border-b border-border'
+        : 'py-6',
+    ]"
+  >
+    <div class="max-w-[1200px] mx-auto px-8 flex items-center gap-10">
+      <!-- Logo -->
+      <a
+        class="font-syne font-extrabold text-[22px] text-heading mr-auto tracking-tightest"
+        href="#"
+        @click.prevent="scrollToSection('hero')"
+      >
+        AM<span class="text-accent">.</span>
       </a>
 
-      <ul class="nav-links" :class="{ open: menuOpen }">
-        <li><a href="#" @click.prevent="scrollToSection('about')">About</a></li>
-        <li><a href="#" @click.prevent="scrollToSection('work')">Work</a></li>
-        <li><a href="#" @click.prevent="scrollToSection('services')">Services</a></li>
-        <li><a href="#" @click.prevent="scrollToSection('contact')">Contact</a></li>
+      <!-- Nav links — desktop + mobile overlay -->
+      <ul
+        :class="menuOpen
+          ? 'flex flex-col items-center justify-center gap-10 fixed inset-0 bg-bg z-40 list-none'
+          : 'hidden md:flex list-none gap-9'"
+      >
+        <li v-for="link in [['about','About'],['work','Work'],['services','Services'],['contact','Contact']]" :key="link[0]">
+          <a
+            :class="menuOpen
+              ? 'font-syne font-bold text-[28px] text-heading'
+              : 'text-sm font-medium text-text tracking-[0.02em] hover:text-heading transition-colors'"
+            href="#"
+            @click.prevent="scrollToSection(link[0])"
+          >{{ link[1] }}</a>
+        </li>
       </ul>
 
-      <a class="cta-btn" href="#" @click.prevent="scrollToSection('contact')">
+      <!-- CTA — desktop only -->
+      <a
+        class="hidden md:inline-flex text-[13px] font-semibold tracking-wide05 text-bg bg-accent px-[22px] py-[10px] rounded-full hover:bg-accent-dark hover:-translate-y-px transition-all"
+        href="#"
+        @click.prevent="scrollToSection('contact')"
+      >
         Let's Talk
       </a>
 
-      <button class="hamburger" :class="{ open: menuOpen }" @click="menuOpen = !menuOpen" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
+      <!-- Hamburger -->
+      <button
+        class="flex md:hidden flex-col gap-[5px] p-1 relative z-50"
+        :aria-expanded="menuOpen"
+        aria-label="Toggle menu"
+        @click="menuOpen = !menuOpen"
+      >
+        <span
+          :class="['block w-[22px] h-[2px] bg-heading rounded-sm transition-all duration-300', menuOpen ? 'translate-y-[7px] rotate-45' : '']"
+        ></span>
+        <span
+          :class="['block w-[22px] h-[2px] bg-heading rounded-sm transition-all duration-300', menuOpen ? 'opacity-0' : '']"
+        ></span>
+        <span
+          :class="['block w-[22px] h-[2px] bg-heading rounded-sm transition-all duration-300', menuOpen ? '-translate-y-[7px] -rotate-45' : '']"
+        ></span>
       </button>
     </div>
   </nav>
 </template>
-
-<style scoped>
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  padding: 24px 0;
-  transition: all 0.4s ease;
-}
-
-.navbar.scrolled {
-  background: rgba(8, 8, 8, 0.92);
-  backdrop-filter: blur(16px);
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-inner {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-}
-
-.logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 22px;
-  color: var(--heading);
-  margin-right: auto;
-  letter-spacing: -0.03em;
-}
-
-.logo .dot {
-  color: var(--accent);
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 36px;
-}
-
-.nav-links a {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-  letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover {
-  color: var(--heading);
-}
-
-.cta-btn {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--bg);
-  background: var(--accent);
-  padding: 10px 22px;
-  border-radius: 100px;
-  transition: background 0.2s, transform 0.2s;
-}
-
-.cta-btn:hover {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  padding: 4px;
-}
-
-.hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--heading);
-  border-radius: 2px;
-  transition: all 0.3s;
-}
-
-.hamburger.open span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
-}
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-.hamburger.open span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
-}
-
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex;
-  }
-  .cta-btn {
-    display: none;
-  }
-  .nav-links {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--bg);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-20px);
-    transition: all 0.4s ease;
-    z-index: -1;
-  }
-  .nav-links.open {
-    opacity: 1;
-    pointer-events: all;
-    transform: translateY(0);
-  }
-  .nav-links a {
-    font-size: 28px;
-    font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    color: var(--heading);
-  }
-}
-</style>
