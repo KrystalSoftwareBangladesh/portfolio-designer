@@ -12,6 +12,7 @@ const filters = ['All', 'Motion', 'Branding', '3D', 'UI/UX']
 const projects = [
   {
     id: 1, title: 'Neon Dreams', category: 'Motion', type: 'Motion Graphics', year: '2024',
+    company: 'Phantom Studio',
     desc: 'A cinematic title sequence for an independent sci-fi short film with neon-lit typography and particle effects.',
     tags: ['After Effects', 'Cinema 4D'], featured: true, color: '#c8f542',
     bg: 'linear-gradient(135deg,#1a1a2e,#16213e 50%,#0f3460)',
@@ -19,6 +20,7 @@ const projects = [
   },
   {
     id: 2, title: 'Forma Studio', category: 'Branding', type: 'Brand Identity', year: '2024',
+    company: 'Phantom Studio',
     desc: 'Complete visual identity for a Barcelona-based architecture firm — logo, palette, and animated brand assets.',
     tags: ['Figma', 'Illustrator'], featured: false, color: '#e8d5b7',
     bg: 'linear-gradient(135deg,#1a1200,#2d2000)',
@@ -26,6 +28,7 @@ const projects = [
   },
   {
     id: 3, title: 'Orbit UI', category: 'UI/UX', type: 'UI Animation', year: '2023',
+    company: 'Phantom Studio',
     desc: 'Dashboard micro-interactions and transition design for a SaaS analytics platform.',
     tags: ['Figma', 'Framer'], featured: false, color: '#7dd3fc',
     bg: 'linear-gradient(135deg,#0c1a2e,#0f2a4a)',
@@ -33,6 +36,7 @@ const projects = [
   },
   {
     id: 4, title: 'Lava Flow', category: '3D', type: '3D Animation', year: '2023',
+    company: 'Flux Creative Agency',
     desc: 'Abstract fluid simulation rendered in Cinema 4D for a luxury cosmetics launch campaign.',
     tags: ['Cinema 4D', 'Redshift'], featured: true, color: '#f97316',
     bg: 'linear-gradient(135deg,#1a0800,#2d1200)',
@@ -40,6 +44,7 @@ const projects = [
   },
   {
     id: 5, title: 'Pulse Brand', category: 'Branding', type: 'Brand Identity', year: '2023',
+    company: 'Flux Creative Agency',
     desc: 'Energetic visual identity for a fitness tech startup with animated logo and motion guidelines.',
     tags: ['Illustrator', 'After Effects'], featured: false, color: '#f43f5e',
     bg: 'linear-gradient(135deg,#1a0010,#2d0020)',
@@ -47,6 +52,7 @@ const projects = [
   },
   {
     id: 6, title: 'Sky Atlas', category: 'Motion', type: 'Explainer Video', year: '2022',
+    company: 'Flux Creative Agency',
     desc: '90-second animated explainer for a space data startup — designed for clarity and cinematic impact.',
     tags: ['After Effects', 'Illustrator'], featured: false, color: '#a78bfa',
     bg: 'linear-gradient(135deg,#0d0a1a,#1a1030)',
@@ -101,13 +107,13 @@ onMounted(() => {
         <article
           v-for="project in filtered" :key="project.id"
           :class="[
-            'project-card bg-bg-card border border-border rounded-2xl overflow-hidden hover:border-border-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer',
+            'project-card bg-bg-card border border-border rounded-2xl overflow-hidden hover:border-border-hover hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col',
             project.featured ? 'lg:col-span-2' : '',
           ]"
         >
           <!-- Visual -->
           <div
-            class="relative overflow-hidden"
+            class="relative overflow-hidden flex-shrink-0"
             :class="project.featured ? 'h-[280px]' : 'h-[220px]'"
             :style="{ background: project.bg }"
           >
@@ -116,8 +122,19 @@ onMounted(() => {
               <circle cx="100" cy="100" r="60" fill="none" :stroke="project.color" stroke-width="0.5" opacity="0.3"/>
               <circle cx="100" cy="100" r="30" fill="none" :stroke="project.color" stroke-width="0.8" opacity="0.4"/>
             </svg>
+
+            <!-- Year + category badge top -->
             <div class="absolute inset-0 p-5 flex flex-col justify-between">
-              <span class="self-end font-syne text-[11px] font-bold tracking-wide15 uppercase text-white/50">{{ project.year }}</span>
+              <div class="flex items-center justify-between">
+                <!-- Category badge -->
+                <span
+                  class="text-[10px] font-bold tracking-wide15 uppercase px-2.5 py-1.5 rounded-full border backdrop-blur-sm"
+                  :style="{ color: project.color, borderColor: project.color + '40', background: project.color + '18' }"
+                >{{ project.category }}</span>
+                <!-- Year -->
+                <span class="font-syne text-[11px] font-bold tracking-wide15 uppercase text-white/50">{{ project.year }}</span>
+              </div>
+              <!-- Tool tags bottom -->
               <div class="flex gap-2 flex-wrap">
                 <span
                   v-for="tag in project.tags" :key="tag"
@@ -128,12 +145,25 @@ onMounted(() => {
           </div>
 
           <!-- Info -->
-          <div class="p-6">
-            <p class="text-[11px] font-bold tracking-wide12 uppercase mb-2" :style="{ color: project.color }">{{ project.type }}</p>
+          <div class="p-6 flex flex-col flex-1">
+            <!-- Type + company row -->
+            <div class="flex items-center justify-between gap-3 mb-2 flex-wrap">
+              <p class="text-[11px] font-bold tracking-wide12 uppercase" :style="{ color: project.color }">{{ project.type }}</p>
+              <!-- Company badge -->
+              <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-text-light bg-bg-2 border border-border rounded-full px-2.5 py-1">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <rect x="1" y="3" width="8" height="6" rx="1" stroke="currentColor" stroke-width="1"/>
+                  <path d="M3 3V2a2 2 0 014 0v1" stroke="currentColor" stroke-width="1"/>
+                </svg>
+                {{ project.company }}
+              </span>
+            </div>
+
             <h3 class="font-syne text-[22px] font-extrabold text-heading mb-2.5">{{ project.title }}</h3>
-            <p class="text-sm text-text leading-[1.7] mb-5">{{ project.desc }}</p>
+            <p class="text-sm text-text leading-[1.7] mb-5 flex-1">{{ project.desc }}</p>
+
             <a
-              class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-heading tracking-[0.02em] hover:gap-2.5 hover:text-accent transition-all"
+              class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-heading tracking-[0.02em] hover:gap-2.5 hover:text-accent transition-all self-start mt-auto"
               href="#" @click.prevent
             >
               View Project
