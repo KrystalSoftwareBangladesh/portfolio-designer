@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -144,9 +144,7 @@ const filtered = computed(() =>
   activeFilter.value === 'All' ? projects : projects.filter(p => p.category === activeFilter.value)
 )
 
-function openProject(project) {
-  selectedProject.value = project
-  document.body.style.overflow = 'hidden'
+function animateOverlayIn() {
   nextTick(() => {
     gsap.fromTo(overlayRef.value,
       { opacity: 0 },
@@ -167,17 +165,53 @@ function openProject(project) {
   })
 }
 
-function closeProject() {
+function openProject(project, pushState = true) {
+  selectedProject.value = project
+  document.body.style.overflow = 'hidden'
+  if (pushState) {
+    window.history.pushState({ projectId: project.id }, '', `?project=${project.id}`)
+  }
+  animateOverlayIn()
+}
+
+function closeProject(pushState = true) {
+  if (!overlayRef.value) {
+    selectedProject.value = null
+    document.body.style.overflow = ''
+    if (pushState) window.history.pushState({}, '', window.location.pathname)
+    return
+  }
   gsap.to(overlayRef.value, {
     opacity: 0, duration: 0.25, ease: 'power2.in',
     onComplete: () => {
       selectedProject.value = null
       document.body.style.overflow = ''
+      if (pushState) window.history.pushState({}, '', window.location.pathname)
     }
   })
 }
 
+function handlePopState() {
+  const params = new URLSearchParams(window.location.search)
+  const id = Number(params.get('project'))
+  const project = id ? projects.find(p => p.id === id) : null
+  if (project) {
+    selectedProject.value = project
+    document.body.style.overflow = 'hidden'
+    animateOverlayIn()
+  } else if (selectedProject.value) {
+    closeProject(false)
+  }
+}
+
 onMounted(() => {
+  const params = new URLSearchParams(window.location.search)
+  const id = Number(params.get('project'))
+  const project = id ? projects.find(p => p.id === id) : null
+  if (project) openProject(project, false)
+
+  window.addEventListener('popstate', handlePopState)
+
   gsap.fromTo('.work-header', { opacity: 0, y: 30 }, {
     opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
     scrollTrigger: { trigger: sectionRef.value, start: 'top 80%' }
@@ -186,6 +220,10 @@ onMounted(() => {
     opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.1,
     scrollTrigger: { trigger: '.work-grid', start: 'top 80%' }
   })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('popstate', handlePopState)
 })
 </script>
 
