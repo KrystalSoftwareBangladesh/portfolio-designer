@@ -7,7 +7,7 @@ const scrollToSection = (id) => {
 }
 
 const navLinks = [
-  ['hero', 'Home'], ['about', 'About'], ['work', 'Work'], ['services', 'Services'], ['contact', 'Contact']
+  ['hero', 'Home'], ['about', 'About'], ['experience', 'Experience'], ['work', 'Work'], ['services', 'Services'], ['contact', 'Contact']
 ]
 const serviceLinks = ['Motion Graphics', 'Brand Identity', 'UI Animation', '3D Design', 'Art Direction']
 const socialLinks = ['Behance', 'Instagram', 'LinkedIn', 'Dribbble']

@@ -43,7 +43,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
           ? 'flex flex-col items-center justify-center gap-10 fixed inset-0 bg-bg z-40 list-none'
           : 'hidden md:flex list-none gap-9'"
       >
-        <li v-for="link in [['about','About'],['work','Work'],['services','Services'],['contact','Contact']]" :key="link[0]">
+        <li v-for="link in [['about','About'],['experience','Experience'],['work','Work'],['services','Services'],['contact','Contact']]" :key="link[0]">
           <a
             :class="menuOpen
               ? 'font-syne font-bold text-[28px] text-heading'
