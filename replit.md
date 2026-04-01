@@ -1,35 +1,53 @@
-# TODO App
+# Alex Morrow – Graphics & Motion Design Portfolio
 
-A simple React-based TODO application.
+A single-page portfolio website for a graphics and motion graphics designer.
 
 ## Tech Stack
 
-- **Frontend:** React 16, Create React App (react-scripts 3.4.1)
-- **Styling:** Bootstrap 4, react-bootstrap
-- **Package Manager:** npm
+- **Runtime:** Node.js 22 (v22.22.0)
+- **Package Manager:** pnpm 10.20.0
+- **Framework:** Vue 3 (v3.4.21)
+- **Build Tool:** Vite 5
+- **Animation:** GSAP 3 with ScrollTrigger
+- **Utilities:** @vueuse/core
+- **Fonts:** Syne (headings), Inter (body) via Google Fonts
 
 ## Project Structure
 
 ```
 src/
-  App.js         - Main component with TODO logic (add, delete, toggle)
-  index.js       - React entry point
-  App.css        - App styles
-  index.css      - Global styles
-public/
-  index.html     - HTML template
+  App.vue                      - Root component
+  main.js                      - Entry point
+  style.css                    - Global CSS variables and base styles
+  components/
+    NavBar.vue                 - Fixed nav with mobile menu
+    HeroSection.vue            - Hero with GSAP animations, rotating rings, marquee
+    AboutSection.vue           - About with skill bars and awards
+    WorkSection.vue            - Filterable portfolio grid
+    ServicesSection.vue        - Services grid with CTA
+    ContactSection.vue         - Contact form with budget selector
+    FooterSection.vue          - Footer with nav links
 ```
+
+## Design
+
+- Dark theme (`#080808` background, `#c8f542` accent)
+- Syne font for display headings, Inter for body
+- GSAP ScrollTrigger animations throughout
+- Responsive for mobile, tablet, desktop
 
 ## Running the App
 
-The app runs on port 5000. The workflow command is:
-
 ```
-NODE_OPTIONS=--openssl-legacy-provider PORT=5000 HOST=0.0.0.0 DANGEROUSLY_DISABLE_HOST_CHECK=true npm start
+pnpm dev
 ```
 
-### Notes
+Runs on `http://0.0.0.0:5000` — configured in `vite.config.js`.
 
-- `NODE_OPTIONS=--openssl-legacy-provider` is required because react-scripts 3.x uses an older webpack that is incompatible with Node.js 20's OpenSSL defaults.
-- `DANGEROUSLY_DISABLE_HOST_CHECK=true` allows the Replit proxy to access the dev server.
-- `HOST=0.0.0.0` binds to all interfaces for the preview pane.
+## Workflow Command
+
+```
+pnpm dev
+```
+
+Port: 5000, Host: 0.0.0.0, allowedHosts: true (for Replit proxy).

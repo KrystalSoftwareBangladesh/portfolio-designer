@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+modules = ["web", "nodejs-22"]
 [agent]
 expertMode = true
 
@@ -26,7 +26,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "NODE_OPTIONS=--openssl-legacy-provider PORT=5000 HOST=0.0.0.0 DANGEROUSLY_DISABLE_HOST_CHECK=true npm start"
+args = "pnpm dev"
 waitForPort = 5000
 
 [[ports]]
@@ -35,5 +35,5 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "static"
-build = ["npm", "run", "build"]
-publicDir = "build"
+build = ["pnpm", "build"]
+publicDir = "dist"
